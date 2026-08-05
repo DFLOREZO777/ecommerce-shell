@@ -1,0 +1,20 @@
+<nav class="premium-nav">
+  <div class="nav-container">
+    <div class="logo">
+      <a routerLink="/"><span class="icon">🎁</span> SorpresasMágicas</a>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Catálogo</a>
+      <a routerLink="/cart" routerLinkActive="active">Mi Carrito 🛒</a>
+      <a routerLink="/admin" routerLinkActive="active" class="admin-link">Dashboard</a>
+    </div>
+  </div>
+</nav>
+
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="premium-footer">
+  <p>© 2026 SorpresasMágicas - Todos los derechos reservados.</p>
+</footer>
