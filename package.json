@@ -4,9 +4,11 @@
   "scripts": {
     "ng": "npx ng",
     "start": "ng serve",
-    "build": "npx ng build --configuration production",
+    "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "postinstall": "node -e \"require('fs').chmodSync('./node_modules/.bin/ng', 0o755)\"",
+    "ci:build": "npm ci && npm run build"
   },
   "private": true,
   "packageManager": "npm@11.11.0",
@@ -22,7 +24,8 @@
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "zone.js": "~0.15.0"
   },
   "devDependencies": {
     "@angular/build": "^21.2.7",
