@@ -41,6 +41,16 @@
                 "react-dom",
                 "react/jsx-runtime"
               ],
+              "outputPath": "dist/ecommerce-shell",
+              "index": "src/index.html",
+              "browser": "src/main.ts",
+              "polyfills": [
+                "zone.js"
+              ],
+              "styles": [
+                "src/styles.scss"
+              ],
+              "scripts": [],
               "budgets": [
                 {
                   "type": "initial",
