@@ -33,7 +33,7 @@ const styles = {
   mobileMenu: { background: '#fff', padding: '2rem', borderRadius: '8px', width: '80%', maxWidth: '300px' }
 };
 
-export const AdminPanel: React.FC<AdminPanelProps> = ({ apiBaseUrl = 'https://mi-ecommerce-api.onrender.com/api' }) => {
+export const AdminPanel: React.FC<AdminPanelProps> = ({ apiBaseUrl = 'https://ecommerce-api-nameless-brook-1050.fly.dev/api' }) => {
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [authError, setAuthError] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'orders' | 'users' | 'products' | 'dashboard'>('dashboard');

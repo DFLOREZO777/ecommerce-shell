@@ -10,7 +10,7 @@ import { AdminPanel } from '../../react-host/components/AdminPanel';
     <div style="padding-top: 2rem; min-height: 80vh; background: #f0f2f5;">
       <app-react-host 
         [reactComponent]="AdminPanelComponent" 
-        [props]="{ apiBaseUrl: 'https://mi-ecommerce-api.onrender.com/api' }">
+        [props]="{ apiBaseUrl: 'https://ecommerce-api-nameless-brook-1050.fly.dev/api' }">
       </app-react-host>
     </div>
   `

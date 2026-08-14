@@ -10,7 +10,7 @@ import { ShoppingCart } from '../../react-host/components/ShoppingCart';
     <div style="padding-top: 2rem;">
       <app-react-host 
         [reactComponent]="ShoppingCartComponent" 
-        [props]="{ apiBaseUrl: 'https://mi-ecommerce-api.onrender.com/api' }">
+        [props]="{ apiBaseUrl: 'https://ecommerce-api-nameless-brook-1050.fly.dev/api' }">
       </app-react-host>
     </div>
   `

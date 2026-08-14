@@ -14,7 +14,7 @@ interface ShoppingCartProps {
   apiBaseUrl?: string;
 }
 
-export const ShoppingCart: React.FC<ShoppingCartProps> = ({ onCheckoutSuccess, apiBaseUrl = 'https://mi-ecommerce-api.onrender.com/api' }) => {
+export const ShoppingCart: React.FC<ShoppingCartProps> = ({ onCheckoutSuccess, apiBaseUrl = 'https://ecommerce-api-nameless-brook-1050.fly.dev/api' }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

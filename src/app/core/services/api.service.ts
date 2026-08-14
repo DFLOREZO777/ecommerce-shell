@@ -8,7 +8,7 @@ import { Order } from '../models/Order';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'https://mi-ecommerce-api.onrender.com/api';
+  private baseUrl = 'https://ecommerce-api-nameless-brook-1050.fly.dev/api';
 
   constructor(private http: HttpClient) { }
 

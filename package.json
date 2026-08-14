@@ -4,13 +4,13 @@
   "scripts": {
     "ng": "npx ng",
     "dev": "ng serve",
-    "start": "node server.js",
+    "start": "ng serve",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "postinstall": "node -e \"require('fs').chmodSync('./node_modules/.bin/ng', 0o755)\"",
-    "serve:prod": "node server.js",
-    "ci:build": "npm ci && npm run build"
+    "ci:build": "npm ci && npm run build",
+    "deploy": "ng build --configuration production && firebase deploy --only hosting"
   },
   "private": true,
   "packageManager": "npm@11.11.0",

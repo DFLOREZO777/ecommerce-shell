@@ -1,7 +1,7 @@
 // ecommerce-shell/src/environments/environment.prod.ts
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://mi-ecommerce-api.onrender.com/api'
+  apiBaseUrl: 'https://ecommerce-api-nameless-brook-1050.fly.dev/api'
 };
 
 /*export const environment = {
