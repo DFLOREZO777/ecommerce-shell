@@ -1220,15 +1220,28 @@ export class StoreComponent implements OnInit {
 
   ngOnInit() {
     this.loadCart();
+    this.loadProducts();
+  }
 
+  /**
+   * Carga los productos con reintentos automáticos.
+   * Si la DB de Neon está suspendida, el primer intento puede fallar
+   * o tardar mucho, así que reintentamos hasta 3 veces con un delay de 2s.
+   */
+  private loadProducts(attempt: number = 1, maxAttempts: number = 3) {
     this.api.getProducts().subscribe({
       next: (data) => {
         this.products = data.filter(p => p.isActive !== false);
         this.loading = false;
       },
-      error: () => {
-        this.loading = false;
-        console.error('Error al cargar los productos');
+      error: (err) => {
+        if (attempt < maxAttempts) {
+          console.warn(`⚠️ Intento ${attempt}/${maxAttempts} falló, reintentando en 2s...`);
+          setTimeout(() => this.loadProducts(attempt + 1, maxAttempts), 2000);
+        } else {
+          this.loading = false;
+          console.error('❌ Error al cargar los productos después de', maxAttempts, 'intentos:', err);
+        }
       }
     });
   }

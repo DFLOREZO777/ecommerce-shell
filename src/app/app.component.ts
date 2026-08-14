@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterModule } from '@angular/router';
+import { ApiService } from './core/services/api.service';
 
 @Component({
   selector: 'app-root',
@@ -62,6 +63,18 @@ import { RouterOutlet, RouterModule } from '@angular/router';
     }
   `]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'ecommerce-shell';
+
+  constructor(private api: ApiService) {}
+
+  ngOnInit() {
+    // Despertar la base de datos Neon al ingresar a la página.
+    // Esto envía un SELECT 1 ligero para que la DB esté lista
+    // cuando se carguen los productos del catálogo.
+    this.api.wakeDb().subscribe({
+      next: () => console.log('✅ Base de datos Neon despertada exitosamente'),
+      error: (err) => console.warn('⚠️ Wake-up de DB falló (se reintentará con la carga de productos):', err.message)
+    });
+  }
 }

@@ -12,6 +12,11 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
+  // Despertar la base de datos Neon (SELECT 1)
+  wakeDb(): Observable<{ status: string; message: string }> {
+    return this.http.get<{ status: string; message: string }>(`${this.baseUrl}/wake`);
+  }
+
   // Productos
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.baseUrl}/products`);
