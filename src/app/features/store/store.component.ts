@@ -27,6 +27,19 @@ interface GenderSub {
   standalone: true,
   imports: [CommonModule, HeroComponent, FormsModule],
   template: `
+    <!-- Global Loading Overlay -->
+    <div class="global-loader-overlay" *ngIf="loading">
+      <div class="loader-content">
+        <div class="logo-container">
+          <span class="logo-icon">✨</span>
+        </div>
+        <h2 class="loader-text">SorpresasMagicas cargando productos ...</h2>
+        <div class="progress-bar-container">
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+    </div>
+
     <app-hero></app-hero>
 
     <div class="social-bar-container">
@@ -128,8 +141,6 @@ interface GenderSub {
 
           <!-- PRODUCTS GRID -->
           <div class="products-area">
-            <div *ngIf="loading" class="loading-msg">Cargando maravillas... ✨</div>
-
             <div class="product-grid" *ngIf="!loading">
               <div class="product-card glass-panel" *ngFor="let p of filteredProducts">
                 <div class="img-wrapper" (click)="openLightbox(p.imageUrl)">
@@ -258,6 +269,78 @@ interface GenderSub {
     </div>
   `,
   styles: [`
+    /* ===== Global Loader Overlay ===== */
+    .global-loader-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      animation: fadeIn 0.4s ease;
+    }
+    .loader-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .logo-container {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #D4AF37 0%, #F5D76E 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+      animation: pulseLogo 2s infinite ease-in-out;
+    }
+    .logo-icon {
+      font-size: 2.5rem;
+      color: white;
+    }
+    .loader-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #333;
+      margin: 0;
+      background: linear-gradient(to right, #D4AF37, #EE5A24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.5px;
+    }
+    .progress-bar-container {
+      width: 300px;
+      height: 6px;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    .progress-bar {
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(90deg, #D4AF37, #F5D76E, #D4AF37);
+      background-size: 200% 100%;
+      border-radius: 10px;
+      animation: loadingBar 1.5s infinite linear;
+    }
+
+    @keyframes pulseLogo {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+      50% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+    }
+    @keyframes loadingBar {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(300%); }
+    }
+
     /* ===== Section Title ===== */
     .section-title {
       text-align: center;
@@ -536,13 +619,6 @@ interface GenderSub {
 
     /* ===== Products Area ===== */
     .products-area { flex: 1; min-width: 0; }
-
-    .loading-msg {
-      text-align: center;
-      color: var(--color-text-light);
-      font-size: 1.5rem;
-      padding: 3rem;
-    }
 
     .product-grid {
       display: grid;
