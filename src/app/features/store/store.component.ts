@@ -1362,8 +1362,8 @@ export class StoreComponent implements OnInit {
 
   // Opens WhatsApp chat with predefined number
   openWhatsApp(): void {
-    const url = `https://api.whatsapp.com/send?phone=${this.whatsappNumber}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+    const url = `https://wa.me/${this.whatsappNumber}`;
+    window.open(url, '_blank');
   }
 
 
