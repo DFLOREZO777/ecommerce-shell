@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { timeout, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { timeout, catchError, retry, delay } from 'rxjs/operators';
+import { of, throwError } from 'rxjs';
 import { HeroComponent } from './hero/hero.component';
 import { ApiService } from '../../core/services/api.service';
 import { Product } from '../../core/models/Product';
@@ -29,18 +29,6 @@ interface GenderSub {
   standalone: true,
   imports: [CommonModule, HeroComponent, FormsModule],
   template: `
-    <!-- Global Loading Overlay -->
-    <div class="global-loader-overlay" *ngIf="loading">
-      <div class="loader-content">
-        <div class="logo-container">
-          <span class="logo-icon">✨</span>
-        </div>
-        <h2 class="loader-text">SorpresasMagicas cargando productos ...</h2>
-        <div class="progress-bar-container">
-          <div class="progress-bar"></div>
-        </div>
-      </div>
-    </div>
 
     <app-hero></app-hero>
 
@@ -143,6 +131,18 @@ interface GenderSub {
 
           <!-- PRODUCTS GRID -->
           <div class="products-area">
+            <!-- Inline loading indicator -->
+            <div class="inline-loader" *ngIf="loading">
+              <div class="loader-content">
+                <div class="logo-container">
+                  <span class="logo-icon">✨</span>
+                </div>
+                <h2 class="loader-text">SorpresasMagicas cargando productos ...</h2>
+                <div class="progress-bar-container">
+                  <div class="progress-bar"></div>
+                </div>
+              </div>
+            </div>
             <div class="product-grid" *ngIf="!loading">
               <div class="product-card glass-panel" *ngFor="let p of filteredProducts">
                 <div class="img-wrapper" (click)="openLightbox(p.imageUrl)">
@@ -271,18 +271,13 @@ interface GenderSub {
     </div>
   `,
   styles: [`
-    /* ===== Global Loader Overlay ===== */
-    .global-loader-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      z-index: 99999;
+    /* ===== Inline Loader (inside product area) ===== */
+    .inline-loader {
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
-      animation: fadeIn 0.4s ease;
+      padding: 4rem 1rem;
+      width: 100%;
     }
     .loader-content {
       text-align: center;
@@ -307,7 +302,7 @@ interface GenderSub {
       color: white;
     }
     .loader-text {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: #333;
       margin: 0;
@@ -1294,7 +1289,7 @@ export class StoreComponent implements OnInit {
     return this.cartItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
   }
 
-  constructor(private api: ApiService, private router: Router) { }
+  constructor(private api: ApiService, private router: Router, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.loadCart();
@@ -1306,6 +1301,7 @@ export class StoreComponent implements OnInit {
       if (this.loading) {
         console.warn('⏱️ Timeout de seguridad: quitando pantalla de carga.');
         this.loading = false;
+        this.cdr.detectChanges();
       }
     }, 20000);
   }
@@ -1316,31 +1312,31 @@ export class StoreComponent implements OnInit {
    * o tardar mucho, así que reintentamos hasta 10 veces con un delay de 3s.
    * Cada petición tiene un timeout de 15s para evitar que cuelgue indefinidamente.
    */
-  private loadProducts(attempt: number = 1, maxAttempts: number = 10) {
+  private loadProducts() {
     this.api.getProducts().pipe(
       timeout(15000),
+      retry({ count: 10, delay: 3000 }),
       catchError(err => {
-        console.warn(`⚠️ Intento ${attempt}/${maxAttempts} falló:`, err.message || err);
-        if (attempt < maxAttempts) {
-          return new Promise<never>((resolve, reject) => {
-            setTimeout(() => {
-              this.loadProducts(attempt + 1, maxAttempts);
-              reject('retry');
-            }, 3000);
-          }) as any;
-        }
+        console.error('❌ Error final al cargar productos:', err);
         this.loading = false;
+        this.cdr.detectChanges();
         return of([] as any[]);
       })
     ).subscribe({
       next: (data: any) => {
-        if (data && data.length >= 0) {
+        if (Array.isArray(data)) {
           this.products = data.filter((p: any) => p.isActive !== false);
-          this.loading = false;
           console.log(`✅ Productos cargados: ${this.products.length}`);
+        } else {
+          console.warn('⚠️ Datos inesperados recibidos:', data);
         }
+        this.loading = false;
+        this.cdr.detectChanges();
       },
-      error: () => { /* handled in catchError retry logic */ }
+      error: () => {
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
