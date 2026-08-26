@@ -222,7 +222,7 @@ interface GenderSub {
     <!-- End of cart FAB -->
 
     <!-- WhatsApp Floating Button -->
-    <button class="whatsapp-fab" (click)="openWhatsApp()" aria-label="WhatsApp">
+    <button type="button" class="whatsapp-fab" (click)="openWhatsApp()" aria-label="WhatsApp">
       <svg class="whatsapp-fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M20.52 3.48A11.93 11.93 0 0 0 12 0C5.37 0 .01 5.37.01 12c0 2.12.56 4.18 1.61 5.99L0 24l6.28-1.64a11.9 11.9 0 0 0 5.72 1.45c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.33zM12 21.5a9.53 9.53 0 0 1-4.87-1.32l-.35-.2-3.73 1 1-3.63-.22-.36A9.53 9.53 0 0 1 2.5 12c0-5.25 4.25-9.5 9.5-9.5s9.5 4.25 9.5 9.5-4.25 9.5-9.5 9.5z"/>
         <path d="M17.92 14.68c-.24-.12-1.41-.7-1.63-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.22-.72-.64-1.2-1.43-1.34-1.66-.14-.24-.02-.37.1-.49.1-.1.24-.26.36-.39.12-.12.16-.21.24-.35.08-.14.04-.26-.02-.38-.06-.12-.54-1.3-.74-1.78-.19-.46-.38-.4-.54-.4-.14 0-.3-.02-.46-.02-.16 0-.42.06-.64.28-.22.22-.86.84-.86 2.05 0 1.2.88 2.36 1 2.52.12.16 1.74 2.68 4.22 3.76.59.25 1.05.4 1.41.51.59.19 1.13.16 1.56.1.48-.07 1.41-.58 1.61-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28z"/>
@@ -1362,8 +1362,8 @@ export class StoreComponent implements OnInit {
 
   // Opens WhatsApp chat with predefined number
   openWhatsApp(): void {
-    const url = `https://wa.me/${this.whatsappNumber}`;
-    window.open(url, '_blank');
+    const url = `https://api.whatsapp.com/send?phone=${this.whatsappNumber}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
   }
 
 
